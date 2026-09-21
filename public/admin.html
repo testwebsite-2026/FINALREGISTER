@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#3b5a12">
+  <title>Admin | Project 77 registration</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <div class="page">
+
+    <header class="top">
+      <h1>Registration admin</h1>
+      <button type="button" class="btn small ghost" id="btn-logout" hidden>Sign out</button>
+    </header>
+
+    <!-- loading -->
+    <p id="loading" class="muted">Loading&hellip;</p>
+
+    <!-- not configured -->
+    <section id="view-setup" class="panel" hidden>
+      <h2>Admin is not set up yet</h2>
+      <p>Add a variable named <strong>ADMIN_PASSWORD</strong> on your server (Railway &rarr; your service &rarr; Variables), let it redeploy, then refresh this page.</p>
+    </section>
+
+    <!-- login -->
+    <section id="view-login" class="panel narrow" hidden>
+      <h2>Sign in</h2>
+      <form id="login-form">
+        <div class="alert" id="login-alert" role="alert" hidden></div>
+        <label for="password">Admin password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="btn" id="btn-login">Sign in</button>
+      </form>
+    </section>
+
+    <!-- dashboard -->
+    <div id="view-dash" hidden>
+
+      <section class="panel linkcard">
+        <h2>Your links</h2>
+        <p class="muted">These links never change, so when you edit the details below the pages update automatically.</p>
+
+        <div class="linkblock">
+          <h3>Main link <span class="tag">with certificate</span></h3>
+          <div class="linkrow">
+            <input id="share-link" type="text" readonly aria-label="Main registration link">
+            <button type="button" class="btn small" id="btn-copy">Copy link</button>
+            <a class="btn small ghost" id="btn-open" href="/" target="_blank" rel="noopener">Open page</a>
+          </div>
+        </div>
+
+        <div class="linkblock">
+          <h3>Second link <span class="tag">no certificate</span></h3>
+          <div class="linkrow">
+            <input id="share-link-online" type="text" readonly aria-label="Second registration link">
+            <button type="button" class="btn small" id="btn-copy-online">Copy link</button>
+            <a class="btn small ghost" id="btn-open-online" href="/online" target="_blank" rel="noopener">Open page</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tab-event" aria-selected="true" aria-controls="panel-event">Event details</button>
+        <button type="button" role="tab" id="tab-regs" aria-selected="false" aria-controls="panel-regs">Registrations <span id="reg-count" class="pill">0</span></button>
+        <button type="button" role="tab" id="tab-reports" aria-selected="false" aria-controls="panel-reports">Reports</button>
+      </div>
+
+      <!-- event details -->
+      <section class="panel" id="panel-event" role="tabpanel" aria-labelledby="tab-event">
+        <form id="event-form" novalidate>
+          <div class="alert" id="event-alert" role="alert" hidden></div>
+
+          <div class="field" data-field="projectName">
+            <label for="projectName">Project name</label>
+            <input id="projectName" type="text" maxlength="60">
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="title">
+            <label for="title">Event title</label>
+            <input id="title" type="text" maxlength="80">
+            <p class="hint">A comma splits the title into two lines on the start page.</p>
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="date">
+            <label for="date">Date</label>
+            <input id="date" type="date">
+            <p class="err"></p>
+          </div>
+
+          <div class="row">
+            <div class="field" data-field="startTime">
+              <label for="startTime">Start time</label>
+              <input id="startTime" type="time">
+              <p class="err"></p>
+            </div>
+            <div class="field" data-field="endTime">
+              <label for="endTime">End time</label>
+              <input id="endTime" type="time">
+              <p class="err"></p>
+            </div>
+          </div>
+
+          <p class="preview" id="preview" aria-live="polite"></p>
+
+          <div class="field" data-field="venue">
+            <label for="venue">Venue</label>
+            <input id="venue" type="text" maxlength="100">
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="verse">
+            <label for="verse">Bible verse (shown on the certificate)</label>
+            <textarea id="verse" rows="2" maxlength="140" placeholder="Leave empty to hide"></textarea>
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="verseRef">
+            <label for="verseRef">Verse reference</label>
+            <input id="verseRef" type="text" maxlength="60">
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="tagline">
+            <label for="tagline">Tagline</label>
+            <input id="tagline" type="text" maxlength="100">
+            <p class="err"></p>
+          </div>
+
+          <div class="field" data-field="contactEmail">
+            <label for="contactEmail">Contact email (shown at the bottom of the page)</label>
+            <input id="contactEmail" type="email" maxlength="254" placeholder="Leave empty to hide">
+            <p class="err"></p>
+          </div>
+
+          <div class="field check" data-field="showBanner">
+            <label class="switch"><input id="showBanner" type="checkbox"> <span>Show the info banner on the start page</span></label>
+            <p class="hint">The banner image has &ldquo;Matthew 18:22&rdquo; and the core message built into it. Turn it off if the verse changes for a new event.</p>
+          </div>
+
+          <div class="field check" data-field="registrationOpen">
+            <label class="switch"><input id="registrationOpen" type="checkbox"> <span>Main link registration is open</span></label>
+            <p class="hint">Turn this off to stop new registrations on the main link. The link stays the same.</p>
+          </div>
+
+          <div class="field" data-field="closedMessage">
+            <label for="closedMessage">Message shown when the main link is closed</label>
+            <input id="closedMessage" type="text" maxlength="200">
+            <p class="err"></p>
+          </div>
+
+          <div class="field check" data-field="onlineOpen">
+            <label class="switch"><input id="onlineOpen" type="checkbox"> <span>Second link registration is open</span></label>
+            <p class="hint">Turn this off to stop new registrations on the second link. It is separate from the main link.</p>
+          </div>
+
+          <div class="field" data-field="onlineClosedMessage">
+            <label for="onlineClosedMessage">Message shown when the second link is closed</label>
+            <input id="onlineClosedMessage" type="text" maxlength="200">
+            <p class="err"></p>
+          </div>
+
+          <div class="savebar">
+            <button type="submit" class="btn" id="btn-save">Save changes</button>
+            <p id="save-status" class="status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+
+      <!-- responses -->
+      <section class="panel" id="panel-regs" role="tabpanel" aria-labelledby="tab-regs" hidden>
+        <div class="regs-head">
+          <p id="reg-summary" class="muted"></p>
+          <a class="btn small" href="/admin/export.csv">Download CSV</a>
+        </div>
+        <div class="field filter">
+          <label for="reg-filter">Show</label>
+          <select id="reg-filter">
+            <option value="all">Everyone</option>
+            <option value="face">Face-to-face</option>
+            <option value="online">Online</option>
+          </select>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Ref</th><th>Type</th><th>Name</th><th>Course / Year</th><th>Section</th><th>Contact</th><th>Email</th><th>Submitted</th><th><span class="sr">Delete</span></th></tr>
+            </thead>
+            <tbody id="reg-body"></tbody>
+          </table>
+        </div>
+        <p id="reg-empty" class="muted" hidden>Nothing to show yet.</p>
+      </section>
+
+      <!-- reports -->
+      <section class="panel" id="panel-reports" role="tabpanel" aria-labelledby="tab-reports" hidden>
+        <div class="stats">
+          <div class="stat face"><span class="num" id="rep-face">0</span><span class="lbl">Face-to-face</span><span class="pct" id="rep-face-pct"></span></div>
+          <div class="stat online"><span class="num" id="rep-online">0</span><span class="lbl">Online</span><span class="pct" id="rep-online-pct"></span></div>
+          <div class="stat total"><span class="num" id="rep-total">0</span><span class="lbl">All responses</span><span class="pct">&nbsp;</span></div>
+        </div>
+
+        <div class="bar" id="rep-bar" role="img" aria-label="Share of face-to-face and online">
+          <span class="seg face" id="bar-face"></span><span class="seg online" id="bar-online"></span>
+        </div>
+        
+
+        <h3>By year level</h3>
+        <div class="tablewrap">
+          <table class="compact">
+            <thead>
+              <tr><th>Year level</th><th>Face-to-face</th><th>Online</th><th>Total</th></tr>
+            </thead>
+            <tbody id="rep-years"></tbody>
+          </table>
+        </div>
+        <p class="hint">Counts update as people submit. To remove a test entry, delete it in the Registrations tab.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="/admin.js"></script>
+</body>
+</html>
